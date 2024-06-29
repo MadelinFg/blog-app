@@ -3,17 +3,28 @@ import { useEffect, useState } from "react";
 import NoteCard from "../NoteCard/NoteCard";
 import SpinnerComponent from "../Spinner/Spinner";
 
-import "./Home.css";
 import { getNotes } from "../../service/data";
+
+import "./Home.css";
 
 const Home = () => {
     const [notes, setNotes] = useState([]);
-    const [showNotes, setShowNotes] = useState(true);
+    const [showNotes, setShowNotes] = useState(false);
     const [showSpinner, setShowSpinner] = useState(false);
 
     useEffect(() => {
-        getNotesInfo();
+        const items = JSON.parse(localStorage.getItem("items"));
+
+        if (items) {
+            items.lenght > 0 ? setNotes(items) : getNotesInfo();
+        } else {
+            getNotesInfo();
+        }
     }, []);
+
+    useEffect(() => {
+        localStorage.setItem("items", JSON.stringify(notes));
+    }, [notes]);
 
     const getNotesInfo = () => {
         setShowSpinner(true);
@@ -21,8 +32,12 @@ const Home = () => {
         setTimeout(async () => {
             const items = await getNotes();
 
-            items.status === "ok" ? setNotes(items.data.data) : setShowNotes(false);
-
+            if (items.status === "ok") {
+                setShowNotes(true);
+                setNotes(items.data.data);
+            } else {
+                setShowNotes(false);
+            }
             setShowSpinner(false);
         }, 1000);
     };
