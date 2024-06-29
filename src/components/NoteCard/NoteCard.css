@@ -1,0 +1,19 @@
+.note-card .card {
+    width: 18rem;
+    min-height: 300px;
+}
+
+.note-card .card .card-body {
+    min-height: 380px;
+    height: 380px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: flex-start;
+}
+
+.note-card .card .card-img-top {
+    width: 100%;
+    min-height: 200px;
+    object-fit: cover;
+}
